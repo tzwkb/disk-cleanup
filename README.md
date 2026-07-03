@@ -1,5 +1,9 @@
 # Disk Cleanup Master
 
+**Agent Skill** — Windows 磁盘空间分析与清理工具，按“扫描激进、删除保守”原则定位大文件、缓存、系统垃圾和常见软件占用，并保留确认与回滚边界。
+
+**Agent Skill** — Safety-first Windows disk cleanup and space-analysis toolkit with aggressive scanning, conservative deletion, cache diagnostics, and confirmation-first cleanup guardrails.
+
 [![PowerShell](https://img.shields.io/badge/PowerShell-5.1+-blue.svg)](https://docs.microsoft.com/powershell/)
 [![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
