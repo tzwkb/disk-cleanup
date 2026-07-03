@@ -1,6 +1,6 @@
 # Disk Cleanup Master
 
-[中文](README_ZH.md) | English
+English | [中文](README_ZH.md)
 
 
 **Agent Skill** — Windows 磁盘空间分析与清理工具，按“扫描激进、删除保守”原则定位大文件、缓存、系统垃圾和常见软件占用，并保留确认与回滚边界。
