@@ -1,43 +1,7 @@
 # Disk Cleanup Master
 
-<!-- bilingual-readme:start -->
+[中文](README_ZH.md) | English
 
-## 双语说明 / Bilingual Documentation
-
-> 本节提供整篇 README 的中英双语维护说明；下方保留原始详细说明、命令、路径和配置示例。
-> This section provides bilingual maintenance notes for the full README; the original detailed notes, commands, paths, and configuration examples are preserved below.
-
-### 中文
-
-**概览**：Windows 磁盘空间分析与清理 Agent Skill，按“扫描激进、删除保守”原则处理大文件、缓存和常见软件占用。
-
-**主要能力**：
-- 扫描磁盘占用、缓存、游戏库和锁定目录。
-- 删除前保留确认边界。
-- 面向 Windows 10/11 排障与清理。
-
-**使用方式**：按 README 和 SKILL.md 中的脚本说明运行扫描，再按风险分级确认清理。
-
-**状态**：该仓库仍按当前 README 的说明维护或使用。
-
-**注意事项**：该工具默认保守，不应静默删除用户数据。
-
-### English
-
-**Overview**: Windows disk space analysis and cleanup Agent Skill using an aggressive-scan, conservative-delete workflow.
-
-**Key capabilities**:
-- Scans disk usage, caches, game libraries, and locked folders.
-- Keeps confirmation boundaries before deletion.
-- Targets Windows 10/11 troubleshooting and cleanup.
-
-**Usage**: Run scans according to README/SKILL.md scripts, then confirm cleanup by risk level.
-
-**Status**: This repository is maintained or used according to the current README notes.
-
-**Notes**: The tool is conservative by default and should not silently delete user data.
-
-<!-- bilingual-readme:end -->
 
 **Agent Skill** — Windows 磁盘空间分析与清理工具，按“扫描激进、删除保守”原则定位大文件、缓存、系统垃圾和常见软件占用，并保留确认与回滚边界。
 
