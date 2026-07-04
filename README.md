@@ -10,9 +10,6 @@ English | [中文](README_ZH.md)
 
 **Agent Skill** — Safety-first Windows disk cleanup and space-analysis toolkit with aggressive scanning, conservative deletion, cache diagnostics, and confirmation-first cleanup guardrails.
 
-[![PowerShell](https://img.shields.io/badge/PowerShell-5.1+-blue.svg)](https://docs.microsoft.com/powershell/)
-[![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 Safety-first Windows disk cleanup toolkit implementing an **aggressive-scan, conservative-delete** workflow.
 
