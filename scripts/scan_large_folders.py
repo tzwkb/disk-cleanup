@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Fast disk space scanner for Windows.
+Fast disk space scanner (cross-platform: Windows + macOS).
 Scans top-level folders under a given path and reports sizes.
 Uses depth-limited recursion to avoid timeouts on huge directories.
 """
@@ -9,6 +9,18 @@ import sys
 from pathlib import Path
 
 MAX_DEPTH = 2
+IS_MAC = sys.platform == "darwin"
+
+# macOS system hidden dirs to skip when scanning from a filesystem root
+MACOS_SYSTEM_HIDDEN = {
+    ".Spotlight-V100",
+    ".fseventsd",
+    ".Trashes",
+    ".vol",
+    ".DocumentRevisions-V100",
+    ".TemporaryItems",
+    ".PKInstallSandboxManager",
+}
 
 
 def get_size(path: str, current_depth: int = 0) -> int:
@@ -32,7 +44,10 @@ def get_size(path: str, current_depth: int = 0) -> int:
 
 
 def main():
-    target = sys.argv[1] if len(sys.argv) > 1 else "C:\\"
+    if len(sys.argv) > 1:
+        target = sys.argv[1]
+    else:
+        target = "C:\\" if not IS_MAC else os.path.expanduser("~")
     print(f"Scanning: {target}  (depth limit: {MAX_DEPTH})")
     print("-" * 60)
 
@@ -47,6 +62,8 @@ def main():
             continue
         name = child.name
         if name.startswith("$") or name == "System Volume Information":
+            continue
+        if IS_MAC and name in MACOS_SYSTEM_HIDDEN:
             continue
         sz = get_size(str(child))
         folders.append((name, sz))

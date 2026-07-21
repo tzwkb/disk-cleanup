@@ -201,3 +201,45 @@
 - 路径：`C:\ProgramData\NVIDIA` 和 `C:\ProgramData\NVIDIA Corporation`
 - 说明：驱动安装缓存、配置文件、ShadowPlay 数据
 - **一般不动**，但 `Downloader` 子目录可能包含旧驱动安装包
+
+---
+
+# macOS 上的存储行为（追加章节）
+
+> macOS 下本技能**只扫描、不删除**，以下仅作识别参考。
+
+## 微信 / 企业微信 / QQ（macOS）
+- 沙盒：`~/Library/Containers/com.tencent.xinWeChat/`、`com.tencent.WeWorkMac/`、`com.tencent.qq/`
+- 内部 `Data/Library/Application Support/` 下有聊天媒体、图片、文件数据库，占用常达几十 GB
+- **清理方式**：App 内「设置 → 通用 → 存储空间 → 清理缓存」
+- **禁忌**：不要直接删容器文件夹，会丢聊天记录与登录态
+
+## 网易云音乐（macOS）
+- 沙盒：`~/Library/Containers/com.netease.163music/`
+- `Cache` 子目录（在线听歌缓存，几 GB）可安全清；离线下载音乐删前确认
+
+## WPS（macOS）
+- 沙盒：`~/Library/Containers/com.kingsoft.wpsoffice.mac/`
+- 崩溃备份在 `~/Library/Application Support/kingsoft` 下
+- **清理方式**：WPS → 设置 → 备份管理
+
+## UTM（虚拟机）
+- 沙盒：`~/Library/Containers/com.utmapp.UTM/`
+- 虚拟机磁盘文件（.utm）默认也在该容器内或 `~/Documents/UTM`
+- **删 = 丢失整个虚拟机**，务必确认不再需要
+
+## Docker Desktop
+- 沙盒：`~/Library/Containers/com.docker.docker/`
+- 镜像 / 容器 / 卷在 `Data/vms` 与 `Data/com.docker.driver.amd64-linux`
+- 不用 Docker 时可在 Docker Desktop → Troubleshoot → Reset / Purge 释放
+- `docker system df` 可只读查看镜像 / 卷占用
+
+## Steam（macOS）
+- 数据：`~/Library/Application Support/Steam/steamapps/`
+  - `common/` 游戏本体；`downloading/` 未完成下载（🟢 可删）；`workshop/` 创意工坊；`userdata/` 存档
+- **清理方式**：Steam → 库 → 右键游戏 → 删除本地内容（走平台卸载，不要直接删文件夹）
+
+## 通用识别（macOS）
+- 可清（🟢）：`Cache` / `Caches` / `Logs` / `Temp` 子目录
+- 慎动（🔴/🟡）：`Data`、`Documents`、`Library/Application Support` 下的业务数据
+- 容器清理口诀：只清缓存类子目录；业务数据一律走 App 内清理或先备份

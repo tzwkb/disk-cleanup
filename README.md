@@ -11,9 +11,11 @@ English | [中文](README_ZH.md)
 **Agent Skill** — Safety-first Windows disk cleanup and space-analysis toolkit with aggressive scanning, conservative deletion, cache diagnostics, and confirmation-first cleanup guardrails.
 
 
-Safety-first Windows disk cleanup toolkit implementing an **aggressive-scan, conservative-delete** workflow.
+Safety-first disk cleanup toolkit implementing an **aggressive-scan, conservative-delete** workflow. Cross-platform: full scan-and-confirm-delete on Windows; **read-only scan on macOS — it never auto-deletes, even when explicitly authorized** (the user runs the suggested commands themselves).
 
 ## Philosophy
+
+> **macOS:** strictly read-only. This skill reports findings and suggested commands but **never runs any `rm` / trash / move operation**, even if the user says "go". Deletion is entirely manual.
 
 | Level | Action | Examples |
 |-------|--------|----------|
@@ -25,13 +27,15 @@ Safety-first Windows disk cleanup toolkit implementing an **aggressive-scan, con
 
 | Script | Purpose |
 |--------|---------|
-| `tree_size_scanner.py` | Layered tree scanning of large folders |
-| `scan_programdata.py` | Audit `C:\ProgramData` by safety level |
-| `cleanup_temp.ps1` | Safe temp file cleanup |
-| `scan_large_folders.py` | Identify space hogs |
-| `find_zombie_packages.py` | Detect orphaned pip packages |
-| `robocopy_wipe.py` | Wipe locked folders when `takeown` fails |
-| `find_folders_by_keyword.py` | Locate folders by name pattern |
+| `tree_size_scanner.py` | Layered tree scanning of large folders (cross-platform) |
+| `scan_programdata.py` | Audit `C:\ProgramData` by safety level (Windows) |
+| `cleanup_temp.ps1` | Safe temp file cleanup (Windows) |
+| `scan_large_folders.py` | Identify space hogs (cross-platform) |
+| `find_zombie_packages.py` | Detect orphaned pip packages (cross-platform) |
+| `robocopy_wipe.py` | Wipe locked folders when `takeown` fails (Windows) |
+| `find_folders_by_keyword.py` | Locate folders by name pattern (cross-platform) |
+| `disk_overview.py` | Per-volume free space overview (macOS, read-only) |
+| `scan_library.py` | Audit `~/Library` by safety level (macOS, read-only) |
 
 ## Usage
 

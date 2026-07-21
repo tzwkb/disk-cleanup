@@ -1,15 +1,19 @@
 #!/usr/bin/env python3
 """
-Layered directory size scanner.
-Recursively drills down from a root path, always following the largest folders first.
-Skips system-critical paths that should never be touched.
+Layered directory size scanner (cross-platform: Windows + macOS).
+Recursively drills down from a root path, always following the largest folders
+first, to locate space consumers fast. Skips OS system-critical paths.
+Read-only — never deletes.
 """
 import os
 import sys
 from pathlib import Path
 
-# Paths that are never worth drilling into for cleanup purposes
+IS_MAC = sys.platform == "darwin"
+
+# Paths that are never worth drilling into for cleanup purposes (union of both OSes)
 SKIP_PATHS = {
+    # Windows
     "c:/windows",
     "c:/windows/system32",
     "c:/windows/syswow64",
@@ -24,10 +28,29 @@ SKIP_PATHS = {
     "c:/users/asus/appdata/roaming/microsoft",
     "c:/users/asus/appdata/local/microsoft",
     "c:/users/asus/appdata/local/packages",
+    # macOS
+    "/System",
+    "/Library",
+    "/Volumes",
+    "/private/var",
+    "/private/tmp",
+    "/cores",
+    "/opt",
+    "/usr",
+    "/bin",
+    "/sbin",
+    "/etc",
+    "/dev",
+    "/proc",
+    "/net",
+    "/home",
+    "/tmp",
+    "/var",
 }
 
 # Paths where we stop drilling but still report size (known app roots)
 STOP_DRILL_PATHS = {
+    # Windows
     "c:/programdata/nvidia",
     "c:/programdata/nvidia corporation",
     "c:/programdata/lghub",
@@ -35,6 +58,8 @@ STOP_DRILL_PATHS = {
     "c:/programdata/microsoft/windows defender",
     "c:/users/asus/appdata/roaming/tencent",
     "c:/users/asus/appdata/local/tencent",
+    # macOS
+    "/System/Volumes/Data/Users",
 }
 
 
@@ -94,6 +119,9 @@ def scan_layer(path: str, depth: int = 0, max_depth: int = 5, min_mb: float = 10
                 name = entry.name
                 if name.startswith("$") and depth == 0:
                     continue
+                # on macOS, skip system hidden dirs at the top level
+                if IS_MAC and depth == 0 and name.startswith("."):
+                    continue
                 entries.append((entry.path, name))
     except PermissionError:
         return
@@ -103,7 +131,6 @@ def scan_layer(path: str, depth: int = 0, max_depth: int = 5, min_mb: float = 10
     if not entries:
         return
 
-    # Calculate sizes
     sized = []
     for full_path, name in entries:
         if should_skip(full_path):
@@ -121,7 +148,6 @@ def scan_layer(path: str, depth: int = 0, max_depth: int = 5, min_mb: float = 10
         size_str = f"{gb:.2f} GB" if gb >= 1.0 else f"{mb:.0f} MB"
         safe_name = name.encode("ascii", "replace").decode("ascii")
 
-        # Mark known cleanable targets
         marker = ""
         np = normalize(full_path)
         if "anaconda" in np or "0install" in np:
@@ -130,6 +156,8 @@ def scan_layer(path: str, depth: int = 0, max_depth: int = 5, min_mb: float = 10
             marker = " [LIKELY CLEANABLE]"
         elif "download" in np:
             marker = " [CHECK FOR OLD FILES]"
+        elif any(k in np for k in ("steam", "xcode", "android", "docker", "utm", "xinwechat")):
+            marker = " [APP DATA — macOS: scan-only]"
 
         print(f"{indent}{safe_name:<50} {size_str:>10}{marker}")
 
@@ -138,7 +166,10 @@ def scan_layer(path: str, depth: int = 0, max_depth: int = 5, min_mb: float = 10
 
 
 def main():
-    target = sys.argv[1] if len(sys.argv) > 1 else "C:\\"
+    if len(sys.argv) > 1:
+        target = sys.argv[1]
+    else:
+        target = "C:\\" if not IS_MAC else os.path.expanduser("~")
     min_mb = float(sys.argv[2]) if len(sys.argv) > 2 else 100.0
     max_depth = int(sys.argv[3]) if len(sys.argv) > 3 else 5
 
@@ -146,7 +177,6 @@ def main():
     print(f"Threshold: {min_mb} MB | Max depth: {max_depth}")
     print("=" * 80)
 
-    # First show top-level
     total = get_dir_size(target)
     print(f"{'ROOT':<50} {total / (1024**3):>6.2f} GB")
     print("")

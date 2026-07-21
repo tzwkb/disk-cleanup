@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-Fast folder name search by keyword regex.
+Fast folder name search by keyword regex (cross-platform: Windows + macOS).
 Scans directory names up to a limited depth (default 6) without calculating sizes.
 Much faster than recursive size scanning; designed for finding specific apps/games
-in large drives (e.g., Steam libraries, cracked game folders) without timeouts.
+in large drives (e.g. Steam libraries, cracked game folders) without timeouts.
 """
 import os
 import re
@@ -36,9 +36,12 @@ def main():
     if len(sys.argv) < 3:
         print("Usage: python find_folders_by_keyword.py <path> <regex_pattern> [max_depth]")
         print("")
-        print("Examples:")
+        print("Examples (Windows):")
         print('  python find_folders_by_keyword.py "D:\\\\" "Call of Duty|COD|Modern Warfare"')
         print('  python find_folders_by_keyword.py "C:\\\\" "anaconda|python" 4')
+        print("Examples (macOS):")
+        print('  python find_folders_by_keyword.py ~/Library "Steam|UTM|docker|xinWeChat" 6')
+        print('  python find_folders_by_keyword.py ~/Library "Claude|Codex|kimi" 4')
         sys.exit(1)
 
     target = sys.argv[1]
